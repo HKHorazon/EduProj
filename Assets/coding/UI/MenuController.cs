@@ -8,6 +8,7 @@ using UnityEngine.Rendering;
 
 public class MenuController : MonoBehaviour
 {
+
     [SerializeField] private GameObject MainMenuCanvas;
     [SerializeField] private GameObject OptionCanvas;
 
@@ -44,7 +45,6 @@ public class MenuController : MonoBehaviour
     [SerializeField] private GameObject comfirmationPrompt = null;
 
     [Header("Levels To Load")]
-    public string _newGameLevel;
     private string levelToLoad;
 
     [Header("Resolution Dropdowns")]
@@ -81,7 +81,7 @@ public class MenuController : MonoBehaviour
 
     public void OnClick_NewGame()
     {
-        LoadGamePlayScene(_newGameLevel);
+        LoadGamePlayScene(DataStore.FIRST_GAME_LEVEL);
     }
 
     public void OnClick_LoadGame()
@@ -147,7 +147,9 @@ public class MenuController : MonoBehaviour
     protected void LoadGamePlayScene(string sceneName)
     {
         MainMenuCanvas.gameObject.SetActive(false);
-        SceneManager.LoadScene(sceneName);
+
+        DataStore.Instance.CurrentBattleScene = sceneName;
+        SceneManager.LoadScene(DataStore.BATTLE_SCENE);
     }
 
 
