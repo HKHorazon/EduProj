@@ -908,6 +908,9 @@ TilemapRenderer:
   m_ReflectionProbeUsage: 0
   m_RayTracingMode: 0
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -1031,9 +1034,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ObjToPush: []
-  wall:
-  - block1
-  - block2
   grid: {fileID: 111096292459240835}
   tilemap: {fileID: 4596489338782689744}
   Wposition: {x: 0, y: 0, z: 0}
+  answerIdList:
+  - correctIds: 01000000020000000300000004000000

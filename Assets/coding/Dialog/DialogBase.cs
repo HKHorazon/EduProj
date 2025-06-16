@@ -31,14 +31,25 @@ public abstract class DialogBase : MonoBehaviour
         }
     }
 
-    protected void ShowAnimation()
+    public virtual void Show()
     {
+        ShowAnimation();
+    }
+
+    public virtual void Hide()
+    {
+        HideAnimation();
+    }
+
+    protected virtual void ShowAnimation()
+    {
+        DialogManager.Instance.ShowDialogHandle(this);
         this.CanvasGroup.interactable = false;
         this.gameObject.SetActive(true);
         this.CanvasGroup.interactable = true;
     }
 
-    protected void HideAnimation()
+    protected virtual void HideAnimation()
     {
         this.CanvasGroup.interactable = false;
         this.gameObject.SetActive(false);

@@ -14,7 +14,7 @@ public class ConfirmOnly_Dialog : DialogBase
         this.desc.text = desc;
         this.OnClick = OnClick;
 
-        ShowAnimation();
+        base.Show();
     }
 
     public void OnClickButton()

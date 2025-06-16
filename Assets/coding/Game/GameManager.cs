@@ -1,3 +1,4 @@
+using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,15 +8,20 @@ using UnityEngine.Tilemaps;
 
 public class GameManager : MonoBehaviour
 {
-    const string PLAYER_PREFAB_PATH = "Player";
+
     string MAP_PATH_BASIC = "GameMap";
-    const string OBJPUSH_PREFAB_PATH = "ObjToPush";
 
-    [field:SerializeField] public GameMap gameMap {  get; private set; }
-    [field: SerializeField] public GameObject blackLoadingScene { get; private set; }
+    public const string PLAYER_PREFAB_NAME = "Player";
 
-    private MapLoader mapLoader = null;
-    private PlayerMovement player = null;
+    public const string PLAYER_TILE_NAME = "player";
+    public const string OBJPUSH_TILE_NAME = "ObjToPush";
+    public const string WALL_TILE_NAME = "block";
+
+    [field:SerializeField, ReadOnly] public GameMap gameMap {  get; private set; }
+    //[field: SerializeField] public GameObject blackLoadingScene { get; private set; }
+
+    [SerializeField, ReadOnly] private MapLoader mapLoader = null;
+    [SerializeField, ReadOnly] private PlayerMovement player = null;
 
     private static GameManager mInstance = null;
     public static GameManager Instance
@@ -42,13 +48,29 @@ public class GameManager : MonoBehaviour
     {
         if (Input.GetKey(KeyCode.B))
         {
-            SceneManager.LoadScene(DataStore.MAIN_SCENE);
+            ShowInGameDialog();
         }
+    }
+
+    public void ShowInGameDialog()
+    {
+        this.player.ControlEnable = false;
+        DialogManager.Instance.inGmaeMenuDialog.Show(delegate ()
+        {
+            this.player.ControlEnable = true;
+        });
+    }
+
+    public void GoBackMenu()
+    {
+        DialogManager.Instance.LoadingDialog.Show();
+        SceneManager.LoadScene(DataStore.MAIN_SCENE);
     }
 
     IEnumerator Initalize(string mapFileName)
     {
-        blackLoadingScene.gameObject.SetActive(true);
+        DialogManager.Instance?.LoadingDialog.Show();
+        //blackLoadingScene.gameObject.SetActive(true);
 
 
         if (mapLoader == null)
@@ -86,10 +108,11 @@ public class GameManager : MonoBehaviour
 
         gameMap.FindObjPush();
 
-        yield return new WaitForSeconds(0.2f);
+        yield return new WaitForSeconds(1f);
         this.player.ControlEnable = true;
 
-        blackLoadingScene.gameObject.SetActive(false);
+        DialogManager.Instance?.LoadingDialog.Hide();
+        //blackLoadingScene.gameObject.SetActive(false);
     }
 
 
@@ -99,13 +122,13 @@ public class GameManager : MonoBehaviour
         if(gameMap == null) { return; }
 
         
-        GameObject prefabPlayer = Resources.Load<GameObject>(PLAYER_PREFAB_PATH);
-        GameObject objpush = Resources.Load<GameObject>(OBJPUSH_PREFAB_PATH);
+        GameObject prefabPlayer = Resources.Load<GameObject>(PLAYER_PREFAB_NAME);
+        GameObject objpush = Resources.Load<GameObject>(OBJPUSH_TILE_NAME);
 
         //TODO: Create Player using "TileMap"
         Vector3 WorldLocCorrection = new Vector3(0.5f,0.5f,0);
 
-        foreach (var spawn in CheckItemLoca("player"))
+        foreach (var spawn in CheckItemLoca(PLAYER_TILE_NAME))
         {
             GameObject objPlayer = Instantiate(prefabPlayer , spawn + WorldLocCorrection , Quaternion.identity);
             this.player = objPlayer?.GetComponent<PlayerMovement>();
@@ -114,18 +137,24 @@ public class GameManager : MonoBehaviour
         //TODO: Create Box using "TileMap"
         int id = 0;
 
-        foreach (var spawn in CheckItemLoca("objpush"))
+        foreach (var spawn in CheckItemLoca(OBJPUSH_TILE_NAME))
         {
+            GameObject obj = (GameObject)Instantiate(
 
+                objpush, spawn + WorldLocCorrection, Quaternion.identity
 
-            Instantiate(
+            );
 
-                objpush, spawn + WorldLocCorrection , Quaternion.identity
+            if(obj == null) { continue; }
+            Push push = obj.GetComponent<Push>();
+            if(push == null) { continue; }
 
-            ).GetComponent<Push>().ID=id;          
+            //Version 1: ID in sequence
+            push.ID = id;
             id++;
 
-            //Debug.LogError($"spawn = {spawn}, id = {id}");
+            //Version 2: Load Name
+
         }   
     }
 
@@ -150,7 +179,7 @@ public class GameManager : MonoBehaviour
 
     }
 
-    List<Vector3> CheckItemLoca(string item)
+    List<Vector3> CheckItemLoca(string itemName)
     {
         BoundsInt bounds = gameMap.tilemap.cellBounds;
 
@@ -159,7 +188,7 @@ public class GameManager : MonoBehaviour
         {          
             Tile tile = gameMap.tilemap.GetTile<Tile>(position);
  
-            if (tile!=null&&tile.name==item)
+            if (tile!=null && tile.name.StartsWith(itemName))
             {
                 //Debug.Log(position);
                 // Debug.Log(tile.name);              

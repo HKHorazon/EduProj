@@ -74,6 +74,8 @@ public class MenuController : MonoBehaviour
         }
 
         resolutionDropdown.AddOptions(options);
+
+        DialogManager.Instance.LoadingDialog.Hide();
     }
 
 
@@ -101,7 +103,7 @@ public class MenuController : MonoBehaviour
         DialogManager.Instance.YesNoDialog.Show(
             "",
             "Are you sure you want to load?",
-            delegate (bool isTrue)
+            delegate(bool isTrue)
             {
                 if (isTrue)
                 {
@@ -111,6 +113,7 @@ public class MenuController : MonoBehaviour
             }
         );
     }
+
 
     public void OnClick_Option()
     {
@@ -147,7 +150,7 @@ public class MenuController : MonoBehaviour
     protected void LoadGamePlayScene(string sceneName)
     {
         MainMenuCanvas.gameObject.SetActive(false);
-
+        DialogManager.Instance.LoadingDialog.Show();
         DataStore.Instance.CurrentBattleScene = sceneName;
         SceneManager.LoadScene(DataStore.BATTLE_SCENE);
     }
