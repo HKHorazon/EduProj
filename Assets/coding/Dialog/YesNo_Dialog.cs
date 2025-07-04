@@ -2,17 +2,17 @@ using System;
 using TMPro;
 using UnityEngine;
 
+[ResPath("Dialog/YesNo_Dialog")]
 public class YesNo_Dialog : DialogBase
 {
     [SerializeField] private TextMeshProUGUI desc;
     private Action<bool> OnClick = null;
 
-    public  void Show(string title, string desc, Action<bool> OnClick)
+    public  void SetData(string title, string desc, Action<bool> OnClick)
     {
         this.desc.text = desc;
         this.OnClick = OnClick;
 
-        base.Show();
     }
 
     public void OnClickYes()

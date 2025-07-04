@@ -75,7 +75,7 @@ public class MenuController : MonoBehaviour
 
         resolutionDropdown.AddOptions(options);
 
-        DialogManager.Instance.LoadingDialog.Hide();
+        DialogManager.Instance.Hide<Loading_Dialog>();
     }
 
 
@@ -92,7 +92,8 @@ public class MenuController : MonoBehaviour
 
         if(levelToLoad == null || levelToLoad == "")
         {
-            DialogManager.Instance.ConfirmOnlyDialog.Show(
+            ConfirmOnly_Dialog cDialog = DialogManager.Instance.Show<ConfirmOnly_Dialog>();
+            cDialog.SetData(
                 "",
                 "No Save File Found",
                 null
@@ -100,7 +101,8 @@ public class MenuController : MonoBehaviour
             return;
         }
 
-        DialogManager.Instance.YesNoDialog.Show(
+        YesNo_Dialog ynDialog = DialogManager.Instance.Show<YesNo_Dialog>();
+        ynDialog.SetData(
             "",
             "Are you sure you want to load?",
             delegate(bool isTrue)
@@ -122,7 +124,8 @@ public class MenuController : MonoBehaviour
 
     public void OnClick_Exit()
     {
-        DialogManager.Instance.YesNoDialog.Show(
+        YesNo_Dialog dialog = DialogManager.Instance.Show<YesNo_Dialog>();
+        dialog.SetData(
             "",
             "Are you sure you want to leave?",
             delegate (bool isTrue)
@@ -150,7 +153,7 @@ public class MenuController : MonoBehaviour
     protected void LoadGamePlayScene(string sceneName)
     {
         MainMenuCanvas.gameObject.SetActive(false);
-        DialogManager.Instance.LoadingDialog.Show();
+        DialogManager.Instance.Show<Loading_Dialog>();
         DataStore.Instance.CurrentBattleScene = sceneName;
         SceneManager.LoadScene(DataStore.BATTLE_SCENE);
     }

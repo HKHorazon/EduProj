@@ -2,6 +2,7 @@
 using TMPro;
 using UnityEngine;
 
+[ResPath("Dialog/Loading_Dialog")]
 public class Loading_Dialog : DialogBase
 {
     public override void Show()
@@ -18,10 +19,10 @@ public class Loading_Dialog : DialogBase
         this.CanvasGroup.interactable = true;
     }
 
-    public override void Hide()
+    protected void HideLoading()
     {
         Debug.Log("~~HIDE Loading~~");
-        base.Hide();
+        base.SelfHide(false);
     }
 
 }

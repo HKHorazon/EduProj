@@ -41,6 +41,7 @@ public class GameManager : MonoBehaviour
         {
             mapName = DataStore.FIRST_GAME_LEVEL;
         }
+        Debug.Log($"Start loading MapName = {mapName}");
         StartCoroutine(Initalize(mapName));
     }
 
@@ -55,21 +56,25 @@ public class GameManager : MonoBehaviour
     public void ShowInGameDialog()
     {
         this.player.ControlEnable = false;
-        DialogManager.Instance.inGmaeMenuDialog.Show(delegate ()
+        //Time.timeScale = 0f;
+
+        InGameMenu_Dialog dialog = DialogManager.Instance.Show<InGameMenu_Dialog>();
+        dialog.SetData(delegate ()
         {
+            //Time.timeScale = 1f;
             this.player.ControlEnable = true;
         });
     }
 
     public void GoBackMenu()
     {
-        DialogManager.Instance.LoadingDialog.Show();
+        DialogManager.Instance.Show<Loading_Dialog>();
         SceneManager.LoadScene(DataStore.MAIN_SCENE);
     }
 
     IEnumerator Initalize(string mapFileName)
     {
-        DialogManager.Instance?.LoadingDialog.Show();
+        DialogManager.Instance.Show<Loading_Dialog>();
         //blackLoadingScene.gameObject.SetActive(true);
 
 
@@ -111,7 +116,7 @@ public class GameManager : MonoBehaviour
         yield return new WaitForSeconds(1f);
         this.player.ControlEnable = true;
 
-        DialogManager.Instance?.LoadingDialog.Hide();
+        DialogManager.Instance.Hide<Loading_Dialog>();
         //blackLoadingScene.gameObject.SetActive(false);
     }
 
