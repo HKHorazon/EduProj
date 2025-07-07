@@ -13,9 +13,15 @@ public class NewGame_Dialog : DialogBase
     [SerializeField] private Transform gridTransform = null;
     [SerializeField, ReadOnly] private List<NewGame_Dialog_OneItem> itemList = null;
 
-    public void Init()
+    private Action<int> gameStartAction = null;
+
+    public void Init(Action<int> gameStartAction)
     {
+        this.gameStartAction = gameStartAction;
+        
         InitItems();
+
+        FillItemStatus();
     }
 
     private void InitItems()
@@ -36,7 +42,7 @@ public class NewGame_Dialog : DialogBase
             if (obj == null) { return;}
 
             NewGame_Dialog_OneItem item = obj.GetComponent<NewGame_Dialog_OneItem>();
-            item.SetData(i + 1, (i + 1).ToString());
+            item.SetData(i + 1, (i + 1).ToString(), OnClick_OneItem);
 
             itemList.Add(item);
         }
@@ -44,7 +50,27 @@ public class NewGame_Dialog : DialogBase
 
     private void FillItemStatus()
     {
+        int currentId = 2;
+        foreach(var item in itemList)
+        {
+            if(item.id == currentId)
+            {
+                item.SetStatus(false, true);
+            }
+            else if(item.id < currentId)
+            {
+                item.SetStatus(false, false);
+            }
+            else
+            {
+                item.SetStatus(true, false);
+            }
+        }
+    }
 
+    public void OnClick_OneItem(NewGame_Dialog_OneItem oneItem)
+    {
+        this.gameStartAction?.Invoke(oneItem.id);
     }
 
     public void OnClick_Return()

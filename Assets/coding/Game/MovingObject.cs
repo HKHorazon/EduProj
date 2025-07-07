@@ -66,7 +66,7 @@ public class MovingObject : MonoBehaviour
 
         if (push1box)
         {     
-            foreach (var objToPush in GameManager.Instance.gameMap.ObjToPush)
+            foreach (var objToPush in GameManager.Instance.gameMap.AllBoxes)
             {
 
                 if (objToPush.transform.position.x == newpos.x && objToPush.transform.position.y == newpos.y)
@@ -77,7 +77,7 @@ public class MovingObject : MonoBehaviour
             }
         }
         
-        foreach (var objToPush in GameManager.Instance.gameMap.ObjToPush)
+        foreach (var objToPush in GameManager.Instance.gameMap.AllBoxes)
         {
             
             if (objToPush.transform.position.x == newpos.x && objToPush.transform.position.y == newpos.y)

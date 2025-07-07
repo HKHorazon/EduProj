@@ -21,7 +21,7 @@ public class DataStore : MonoBehaviour
 
     public const string MAIN_SCENE = "MainMenu";
     public const string BATTLE_SCENE = "BattleScene";
-    public const string FIRST_GAME_LEVEL = "Stages/First";
+    public const string FIRST_GAME_LEVEL = "Stages/Stage01";
 
-    public string CurrentBattleScene = "";
+    public string CurrentMapName = "";
 }

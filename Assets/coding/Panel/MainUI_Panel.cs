@@ -13,7 +13,12 @@ public class MainUI_Panel : PanelBase
         //LoadGamePlayScene(DataStore.FIRST_GAME_LEVEL);
 
         NewGame_Dialog dialog = DialogManager.Instance.Show<NewGame_Dialog>();
-        dialog.Init();
+        dialog.Init(delegate (int stage)
+        {
+            string stageName = $"Stage{stage.ToString("00")}";
+            Debug.Log($"stageName = {stageName}");
+            LoadGamePlayScene(stageName);
+        });
     }
 
     public void OnClick_LoadGame()
@@ -46,11 +51,11 @@ public class MainUI_Panel : PanelBase
         );
     }
 
-    protected void LoadGamePlayScene(string sceneName)
+    protected void LoadGamePlayScene(string stageName)
     {
         PanelManager.Instance.HideAllPanels();
         DialogManager.Instance.Show<Loading_Dialog>();
-        DataStore.Instance.CurrentBattleScene = sceneName;
+        DataStore.Instance.CurrentMapName = stageName;
         SceneManager.LoadScene(DataStore.BATTLE_SCENE);
     }
 

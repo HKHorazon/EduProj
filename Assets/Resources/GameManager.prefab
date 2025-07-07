@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 6215170418533519867}
   - component: {fileID: 5790803904293184521}
-  - component: {fileID: 5322326989819856916}
   - component: {fileID: 5105745324533488119}
   m_Layer: 0
   m_Name: GameManager
@@ -47,18 +46,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <gameMap>k__BackingField: {fileID: 0}
---- !u!114 &5322326989819856916
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5336123946729712208}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 79558808115965745be592e1b132ec5f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  mapLoader: {fileID: 0}
+  player: {fileID: 0}
 --- !u!114 &5105745324533488119
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -71,3 +60,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee3b9ac41287f024dadb3e2210fc5164, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  <GMap>k__BackingField: {fileID: 0}

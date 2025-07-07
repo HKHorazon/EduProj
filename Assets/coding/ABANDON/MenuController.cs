@@ -154,7 +154,7 @@ public class MenuController : MonoBehaviour
     {
         MainMenuCanvas.gameObject.SetActive(false);
         DialogManager.Instance.Show<Loading_Dialog>();
-        DataStore.Instance.CurrentBattleScene = sceneName;
+        DataStore.Instance.CurrentMapName = sceneName;
         SceneManager.LoadScene(DataStore.BATTLE_SCENE);
     }
 

@@ -48,7 +48,7 @@ public class PlayerMovement : MovingObject
 
         SoundManager.SoundInstance.PlayWalkSoundEffect();
        
-        GameManager.Instance.gameMap.FindObjPush();
+        //GameManager.Instance.gameMap.FindObjPush();
 
         if (Mathf.Abs(direction.x) < 0.5)
         {
@@ -68,6 +68,7 @@ public class PlayerMovement : MovingObject
         else
         {
             MovementAnimation(direction);
+            GameManager.Instance.CheckVictory();
             return true;
         }
     }

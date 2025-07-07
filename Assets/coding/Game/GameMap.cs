@@ -14,19 +14,13 @@ public class AnswerIDList
 public class GameMap : MonoBehaviour
 {
     
-    public GameObject[] ObjToPush;
+    public List<Push> AllBoxes { get;private set; }
     //public string [] wall;
     public Grid grid;
     public Tilemap tilemap;
     public Vector3 Wposition = new Vector3(0,0,0);
 
     public List<AnswerIDList> answerIdList;
-
-    // Start is called before the first frame update
-    void Start()
-    {         
-        
-    }
 
     public bool block(Vector3 n_direction)
     {
@@ -46,8 +40,10 @@ public class GameMap : MonoBehaviour
         
         return true;
     }
-    public void FindObjPush()
+
+    public void SetAllBoxes(List<Push> allBoxes)
     {
-        ObjToPush = GameObject.FindGameObjectsWithTag(GameManager.OBJPUSH_TILE_NAME);
+        this.AllBoxes = allBoxes;
+        AllBoxes = AllBoxes ?? new List<Push>();
     }
 }

@@ -20,6 +20,25 @@ public class InGameMenu_Dialog : DialogBase
         base.Hide();
     }
 
+    public void OnClick_RestartGame()
+    {
+        YesNo_Dialog yesNo = DialogManager.Instance.Show<YesNo_Dialog>();
+        yesNo.SetData("", "Are you sure you want to restart the game?",
+            delegate (bool isTrue)
+            {
+                if (isTrue)
+                {
+                    Hide();
+                    GameManager.Instance.RestartGame();
+                }
+                else
+                {
+                    DialogManager.Instance.Show<InGameMenu_Dialog>();
+                }
+            }
+        );
+    }
+
     public void OnClick_Options()
     {
         OptionMenu_Dialog menu = DialogManager.Instance.Show<OptionMenu_Dialog>();

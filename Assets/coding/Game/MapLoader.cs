@@ -1,10 +1,11 @@
+using Sirenix.OdinInspector;
 using System.Collections;
 using System.Threading.Tasks;
 using UnityEngine;
 
 public class MapLoader : MonoBehaviour
 {
-    public GameMap GMap { get; private set; }
+    [field: SerializeField, ReadOnly] public GameMap GMap { get; private set; }
 
     void Start()
     {                   
@@ -24,7 +25,7 @@ public class MapLoader : MonoBehaviour
         yield return new WaitForSeconds(0.1f);
         yield return null;
 
-        GameObject gameItem = Resources.Load<GameObject>(mapFileName);
+        GameObject gameItem = Resources.Load<GameObject>("Stages/"+mapFileName);
 
 
         yield return new WaitForSeconds(0.1f);

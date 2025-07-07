@@ -22,7 +22,6 @@ public class UIManager : MonoBehaviour
                 var gameObj = GameObject.Instantiate(prefab);
                 mInstance = gameObj.GetComponent<UIManager>();
 
-                DontDestroyOnLoad(gameObj);
             }
             return mInstance;
         }
