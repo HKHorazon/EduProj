@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -7,13 +8,23 @@ public class Push : MovingObject
 {
     [field:SerializeField]private bool Push1Box = false;
     public int ID;
-    // Start is called before the first frame update
-    void Start()
+
+    public TextMeshPro text;
+    [SerializeField] private string moveSFX;
+
+
+    public void SetText(char c)
     {
-        
+        if (text != null)
+        {
+            text.text = c.ToString();
+        }
     }
 
-    // Update is called once per frame
+    protected override void PlayMoveSFX()
+    {
+        AudioManager.Instance.PlaySFX(moveSFX);
+    }
 
     public bool Move(Vector2 direction)
     {

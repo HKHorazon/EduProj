@@ -7,6 +7,11 @@ public class MainUI_Panel : PanelBase
 {
     private string levelToLoad;
 
+    public override void Show()
+    {
+        base.Show();
+        AudioManager.Instance.PlayBGM(DataStore.BGM_MENU);
+    }
 
     public void OnClick_NewGame()
     {

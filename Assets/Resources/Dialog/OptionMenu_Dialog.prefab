@@ -1369,6 +1369,7 @@ GameObject:
   - component: {fileID: 3267988936035304321}
   - component: {fileID: 5039182749882066229}
   - component: {fileID: 6380877158484650988}
+  - component: {fileID: 6995905622673513217}
   m_Layer: 5
   m_Name: Back Button
   m_TagString: Untagged
@@ -1550,6 +1551,19 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
+--- !u!114 &6995905622673513217
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3152787268556111706}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e4b5d4b22299a994d955a84f707ebad0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ClickSound: Sound/UI_Click
 --- !u!1 &3378255767173184179
 GameObject:
   m_ObjectHideFlags: 0
@@ -2899,6 +2913,7 @@ GameObject:
   - component: {fileID: 7242984647024913051}
   - component: {fileID: 6834920851593520887}
   - component: {fileID: 8459991776413536887}
+  - component: {fileID: 2727257674108424670}
   m_Layer: 5
   m_Name: Apply Button
   m_TagString: Untagged
@@ -3080,6 +3095,19 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &2727257674108424670
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5876273294948689636}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e4b5d4b22299a994d955a84f707ebad0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ClickSound: Sound/UI_Click
 --- !u!1 &5882269391666925222
 GameObject:
   m_ObjectHideFlags: 0
@@ -3890,6 +3918,7 @@ GameObject:
   - component: {fileID: 3952052040818558936}
   - component: {fileID: 7626139119235826018}
   - component: {fileID: 5438799809760675564}
+  - component: {fileID: 2964417865968019213}
   m_Layer: 5
   m_Name: Reset Button
   m_TagString: Untagged
@@ -4071,6 +4100,19 @@ MonoBehaviour:
           m_StringArgument: Graphics
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &2964417865968019213
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6489300051002394153}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e4b5d4b22299a994d955a84f707ebad0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ClickSound: Sound/UI_Click
 --- !u!1 &6716574314936932226
 GameObject:
   m_ObjectHideFlags: 0

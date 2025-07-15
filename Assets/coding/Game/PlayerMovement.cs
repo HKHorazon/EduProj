@@ -30,29 +30,31 @@ public class PlayerMovement : MovingObject
 
         if (moveinput.sqrMagnitude > 0.5)
         {
-            if (ReadyToMove)
+            if (!isMoving)
             {
-                ReadyToMove = false;
-
                 Move(moveinput);
             }
         }
-        else
-        {
-            ReadyToMove = true;
-        }
     }
 
-    public bool Move(Vector2 direction)
+    protected override void PlayMoveSFX()
     {
+        AudioManager.Instance.PlaySFX(DataStore.Instance.SFX_PLAYER_MOVE);
+    }
 
-        SoundManager.SoundInstance.PlayWalkSoundEffect();
-       
-        //GameManager.Instance.gameMap.FindObjPush();
+    public void Move(Vector2 direction)
+    {
+        StartCoroutine(MoveInner(direction));
+    }
+
+
+
+    private IEnumerator MoveInner(Vector2 direction)
+    {
 
         if (Mathf.Abs(direction.x) < 0.5)
         {
-            direction.x = 0;   
+            direction.x = 0;
         }
         else
         {
@@ -61,15 +63,24 @@ public class PlayerMovement : MovingObject
 
         direction.Normalize();
 
-        if(Blocked(transform.position,direction,false))
+        if (Blocked(transform.position, direction, false))
         {
-            return false;
+            yield break;
         }
         else
         {
             MovementAnimation(direction);
-            GameManager.Instance.CheckVictory();
-            return true;
+            while (isMoving)
+            {
+                yield return null;
+            }
+
+            if (GameManager.Instance.CheckVictory())
+            {
+                ControlEnable = false;
+                yield return new WaitForSeconds(0.5f);
+                GameManager.Instance.ShowVictoryDialog();
+            }
         }
     }
 

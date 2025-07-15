@@ -5,7 +5,7 @@ using static Unity.Collections.AllocatorManager;
 
 public class MovingObject : MonoBehaviour
 {
-    const float TOTAL_TIME = 0.05F;
+    const float MOVE_ONE_GRID_TIME = 0.3F;
 
     protected bool isMoving = false;
   
@@ -22,19 +22,18 @@ public class MovingObject : MonoBehaviour
     {
         float time = 0f;
         isMoving = true;
+        PlayMoveSFX();
 
-        while (time < TOTAL_TIME)
+        while (time < MOVE_ONE_GRID_TIME)
         {
             this.transform.position = new Vector3(
-                fromPos.x + direction.x * (time / TOTAL_TIME),
-                fromPos.y + direction.y * (time / TOTAL_TIME),
+                fromPos.x + direction.x * (time / MOVE_ONE_GRID_TIME),
+                fromPos.y + direction.y * (time / MOVE_ONE_GRID_TIME),
                 fromPos.z
             );
             time += Time.deltaTime;
             //yield return new WaitForSeconds(0.05f);
             yield return null;
-            
-           
         }
         this.transform.position = new Vector3(
             fromPos.x + direction.x,
@@ -43,6 +42,11 @@ public class MovingObject : MonoBehaviour
         );
        
         isMoving = false;
+    }
+    
+    protected virtual void PlayMoveSFX()
+    {
+
     }
 
     public bool Blocked(Vector2 position, Vector2 direction, bool push1box)

@@ -58,6 +58,8 @@ public class OptionMenu_Dialog : DialogBase
         LoadPlayerPrefOrDefault();
 
         FillDataToUI();
+
+        hasLoadedFromPlayerPref = true;
     }
 
     private void CollectOptions()
@@ -128,6 +130,7 @@ public class OptionMenu_Dialog : DialogBase
                 allowDisplayMode[currentDisplayMode]
             );
         }
+        if(hasLoadedFromPlayerPref) AudioManager.Instance.PlaySFX(DataStore.SFX_BUTTON_CLICK);
     }
     public void OnChange_Resolution()
     {
@@ -140,14 +143,21 @@ public class OptionMenu_Dialog : DialogBase
                 allowDisplayMode[currentDisplayMode]
             );
         }
+        if (hasLoadedFromPlayerPref) AudioManager.Instance.PlaySFX(DataStore.SFX_BUTTON_CLICK);
     }
     public void OnChange_BGM()
     {
         Debug.Log($"OnChange_BGM => {BGMSlider.value}");
+        bgmValue = BGMSlider.value;
+        AudioManager.Instance.SetBGMVolume(bgmValue);
     }
     public void OnChange_Sound()
     {
         Debug.Log($"OnChange_BGM => {SoundSlider.value}");
+        soundValue = SoundSlider.value;
+        AudioManager.Instance.SetSFXVolume(soundValue);
+
+        //AudioManager.Instance.PlaySFX(DataStore.SFX_VICTORY);
     }
 
     #endregion

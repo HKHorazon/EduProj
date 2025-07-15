@@ -60,7 +60,7 @@ public class InGameMenu_Dialog : DialogBase
             {
                 if (isTrue)
                 {
-                    Hide();
+                    SelfHide(true);
                     GameManager.Instance.GoBackMenu();
                 }
                 else

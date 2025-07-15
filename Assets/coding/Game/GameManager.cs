@@ -1,10 +1,12 @@
 using Sirenix.OdinInspector;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Tilemaps;
+using UnityEngine.UIElements;
 
 
 public class GameManager : MonoBehaviour
@@ -16,7 +18,7 @@ public class GameManager : MonoBehaviour
     public const string OBJPUSH_PREFAB_NAME = "ObjToPush";
 
     public const string PLAYER_TILE_NAME = "player";
-    public const string OBJPUSH_TILE_NAME = "objpush";
+    public const string OBJPUSH_TILE_NAME = "Box";
     public const string WALL_TILE_NAME = "block";
 
     
@@ -49,6 +51,10 @@ public class GameManager : MonoBehaviour
         {
             ShowInGameDialog();
         }
+        if (Input.GetKeyDown(KeyCode.V))
+        {
+            isVictory = true;
+        }
     }
 
     private void StartNewGame()
@@ -59,6 +65,8 @@ public class GameManager : MonoBehaviour
             mapName = DataStore.FIRST_GAME_LEVEL;
         }
         Debug.Log($"Start MapName = {mapName}");
+
+        AudioManager.Instance.PlayBGM(DataStore.BGM_INGAME);
         StartCoroutine(Initalize(mapName));
     }
 
@@ -151,7 +159,7 @@ public class GameManager : MonoBehaviour
 
         yield return null;
 
-        List < Push> allBoxs= CreateAllBox();
+        List<Push> allBoxs= CreateAllBox(gameMap);
         Debug.Log($"Create Box count={allBoxs.Count}");
 
         yield return null;
@@ -183,14 +191,18 @@ public class GameManager : MonoBehaviour
         Vector3 WorldLocCorrection = new Vector3(0.5f, 0.5f, 0);
         GameObject prefabPlayer = Resources.Load<GameObject>(PLAYER_PREFAB_NAME);
 
-        foreach (var spawn in CheckItemLoca(PLAYER_TILE_NAME))
+        foreach (var tuple in CheckItemLoca(PLAYER_TILE_NAME))
         {
-            GameObject objPlayer = Instantiate(prefabPlayer , spawn + WorldLocCorrection , Quaternion.identity);
+            GameObject objPlayer = Instantiate(
+                prefabPlayer , 
+                tuple.Item2 + WorldLocCorrection ,
+                Quaternion.identity
+            );
             this.player = objPlayer?.GetComponent<PlayerMovement>();
         }
     }
 
-    private List<Push> CreateAllBox()
+    private List<Push> CreateAllBox(GameMap gameMap)
     {
         List<Push> allBoxes = new List<Push>();
         if (gameMap == null) { return allBoxes; }
@@ -201,10 +213,11 @@ public class GameManager : MonoBehaviour
         int id = 0;
         int count = 0;
 
-        foreach (var spawn in CheckItemLoca(OBJPUSH_TILE_NAME))
+        foreach (var tuple in CheckItemLoca(OBJPUSH_TILE_NAME))
         {
+
             GameObject obj = (GameObject)Instantiate(
-                objpush, spawn + WorldLocCorrection, Quaternion.identity
+                objpush, tuple.Item2 + WorldLocCorrection, Quaternion.identity
             );
 
             if (obj == null) { continue; }
@@ -215,11 +228,24 @@ public class GameManager : MonoBehaviour
             count++;
 
             //Version 1: ID in sequence
-            push.ID = id;
-            id++;
+            //push.ID = id;
+            //id++;
 
             //Version 2: Load Name
+            string[] strs = tuple.Item1.name.Split("_");
 
+            push.ID = 0;
+            int tempID = 0;
+            if (strs.Length == 2 && int.TryParse(strs[1], out tempID)) 
+            {
+                push.ID = tempID;
+            }
+            push.SetText(' ');
+            if (gameMap.basicWordTable.ContainsKey(push.ID))
+            {
+                push.SetText(gameMap.basicWordTable[push.ID]);
+            }
+            
         }
         return allBoxes;
     }
@@ -230,6 +256,15 @@ public class GameManager : MonoBehaviour
 
         if(this.gameMap != null)
         {
+            // Remove Box if needed
+            foreach (var box in this.gameMap.AllBoxes)
+            {
+                if (box != null && box.gameObject != null)
+                {
+                    GameObject.Destroy(box.gameObject);
+                }
+            }
+            this.gameMap.AllBoxes.Clear();
             GameObject.Destroy(this.gameMap.gameObject);
             gameMap = null;
         }
@@ -240,18 +275,17 @@ public class GameManager : MonoBehaviour
             this.player = null;
         }
 
-        //TODO: Remove Box if needed
-
+     
     }
 
-    List<Vector3> CheckItemLoca(string itemName)
+    List<Tuple<Tile,Vector3>> CheckItemLoca(string itemName)
     {
 
         Dictionary<string, int> temp = new Dictionary<string, int>();
 
         BoundsInt bounds = gameMap.tilemap.cellBounds;
 
-        List<Vector3> list = new List<Vector3>();
+        List<Tuple<Tile, Vector3>> list = new List<Tuple<Tile, Vector3>>();
         foreach (var position in bounds.allPositionsWithin)
         {          
             Tile tile = gameMap.tilemap.GetTile<Tile>(position);
@@ -264,11 +298,12 @@ public class GameManager : MonoBehaviour
                 if (tile.name.StartsWith(itemName))
                 {
                     //Debug.Log(position);
-                    // Debug.Log(tile.name);              
-                    list.Add(gameMap.tilemap.CellToWorld(position));
+                    // Debug.Log(tile.name);
+                    Tuple<Tile, Vector3> tuple = new Tuple<Tile, Vector3>(tile, gameMap.tilemap.CellToWorld(position));
+                  
                     gameMap.tilemap.SetTile(position, null);
 
-
+                    list.Add(tuple);
                 }
             }
     
@@ -284,16 +319,23 @@ public class GameManager : MonoBehaviour
         //Debug.LogError("Find Noting");
         return list;
     }
-    
+
     #endregion
 
 
 
-    #region Game Logic
+    #region Game Process Logic
+    public bool isVictory = false;
 
-    public void CheckVictory()
+    public bool CheckVictory()
     {
+        return isVictory;
+    }
 
+    internal void ShowVictoryDialog()
+    {
+        Victory_Dialog dialog = DialogManager.Instance.Show<Victory_Dialog>();
+        dialog.Init(delegate () { });
     }
 
     #endregion

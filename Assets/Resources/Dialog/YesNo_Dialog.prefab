@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 8735564595885819678}
   - component: {fileID: 45352222239528973}
   - component: {fileID: 3919611602266036249}
+  - component: {fileID: 6315704386538915820}
   m_Layer: 5
   m_Name: LoadGameDialog_NoButton
   m_TagString: Untagged
@@ -193,6 +194,19 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &6315704386538915820
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 188610867542647866}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e4b5d4b22299a994d955a84f707ebad0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ClickSound: Sound/UI_Click
 --- !u!1 &2681501146334470083
 GameObject:
   m_ObjectHideFlags: 0
@@ -283,6 +297,7 @@ GameObject:
   - component: {fileID: 4284738308296254250}
   - component: {fileID: 6543716066238182408}
   - component: {fileID: 2291316281576266788}
+  - component: {fileID: 1619933123205876609}
   m_Layer: 5
   m_Name: LoadGameDialog_YesButton
   m_TagString: Untagged
@@ -464,6 +479,19 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &1619933123205876609
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5108508875359794993}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e4b5d4b22299a994d955a84f707ebad0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ClickSound: Sound/UI_Click
 --- !u!1 &7362985302515070784
 GameObject:
   m_ObjectHideFlags: 0
@@ -484,7 +512,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &69102011445902293
 RectTransform:
   m_ObjectHideFlags: 0
@@ -526,6 +554,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f05bfd9c41494994fba5e1ae84d84be6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  belongManager: {fileID: 0}
   desc: {fileID: 8717036323451654189}
 --- !u!223 &1909994407943234250
 Canvas:

@@ -1,3 +1,4 @@
+using Sirenix.OdinInspector;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -11,7 +12,7 @@ public class AnswerIDList
     public List<int> correctIds;
 }
 
-public class GameMap : MonoBehaviour
+public class GameMap : SerializedMonoBehaviour
 {
     
     public List<Push> AllBoxes { get;private set; }
@@ -21,6 +22,8 @@ public class GameMap : MonoBehaviour
     public Vector3 Wposition = new Vector3(0,0,0);
 
     public List<AnswerIDList> answerIdList;
+
+    [ShowInInspector] public Dictionary<int, char> basicWordTable = new Dictionary<int, char>();
 
     public bool block(Vector3 n_direction)
     {
