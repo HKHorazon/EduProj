@@ -110,7 +110,7 @@ public class MenuController : MonoBehaviour
                 if (isTrue)
                 {
                     levelToLoad = PlayerPrefs.GetString("SavedLevel");
-                    LoadGamePlayScene(levelToLoad);
+                    //LoadGamePlayScene(levelToLoad);
                 }
             }
         );
@@ -150,11 +150,11 @@ public class MenuController : MonoBehaviour
         Screen.SetResolution(resolution.width, resolution.height, Screen.fullScreen);
     }
 
-    protected void LoadGamePlayScene(string sceneName)
+    protected void LoadGamePlayScene(int stageID)
     {
         MainMenuCanvas.gameObject.SetActive(false);
         DialogManager.Instance.Show<Loading_Dialog>();
-        DataStore.Instance.CurrentMapName = sceneName;
+        DataStore.Instance.CurrentStageId = stageID;
         SceneManager.LoadScene(DataStore.BATTLE_SCENE);
     }
 

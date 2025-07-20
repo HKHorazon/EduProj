@@ -6,6 +6,8 @@ using UnityEngine.UIElements;
 
 public class Push : MovingObject
 {
+    public int sequenceID = 0;
+
     [field:SerializeField]private bool Push1Box = false;
     public int ID;
 

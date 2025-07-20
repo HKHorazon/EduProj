@@ -12,7 +12,7 @@ public class MenuScene_Init : MonoBehaviour
         PanelManager.Instance.Show<MainBackground_Panel>();
         PanelManager.Instance.Show<MainUI_Panel>();
 
-
+        Cursor.visible = true;
     }
 
 }

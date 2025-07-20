@@ -39,9 +39,24 @@ public abstract class DialogBase : MonoBehaviour
 
     #region SHOW
 
-    public virtual void Show()
+    public virtual void Show(bool immediatly=false)
     {
-        ShowAnimation();
+        if (immediatly)
+        {
+            ShowImmediatly();
+        }
+        else
+        {
+            ShowAnimation();
+        }
+    }
+
+    protected virtual void ShowImmediatly()
+    {
+        DialogManager.Instance.ShowDialogHandle(this);
+        this.gameObject.SetActive(true);
+        this.CanvasGroup.interactable = true;
+        this.transform.localScale = Vector3.one;
     }
 
     protected virtual void ShowAnimation()

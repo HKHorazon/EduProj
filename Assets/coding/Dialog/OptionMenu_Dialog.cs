@@ -9,10 +9,6 @@ using UnityEngine.UI;
 [ResPath("Dialog/OptionMenu_Dialog")]
 public class OptionMenu_Dialog : DialogBase
 {
-    const string DISPLAY_MODE_TAG = "DISPLAY_MODE";
-    const string RESOLUTION_TAG = "RESOLUTION";
-    const string SOUND_TAG = "SOUND";
-    const string BGM_TAG = "BGM";
 
     [SerializeField] private TMP_Dropdown resolutionDropDown;
     [SerializeField] private TMP_Dropdown displayModeDropDown;
@@ -99,18 +95,18 @@ public class OptionMenu_Dialog : DialogBase
     }
     private void LoadPlayerPrefOrDefault()
     {
-        bgmValue = PlayerPrefs.GetFloat(BGM_TAG, 0.8f);
-        soundValue = PlayerPrefs.GetFloat(SOUND_TAG, 0.8f);
-        currentResolution = PlayerPrefs.GetString(RESOLUTION_TAG, "1920 x 1080");
-        currentDisplayMode = PlayerPrefs.GetString(DISPLAY_MODE_TAG, "Windowed");
+        bgmValue = PlayerPrefs.GetFloat(DataStore.PREF_BGM_TAG, 0.8f);
+        soundValue = PlayerPrefs.GetFloat(DataStore.PREF_SOUND_TAG, 0.8f);
+        currentResolution = PlayerPrefs.GetString(DataStore.PREF_RESOLUTION_TAG, "1920 x 1080");
+        currentDisplayMode = PlayerPrefs.GetString(DataStore.PREF_DISPLAY_MODE_TAG, "Windowed");
     }
 
     private void SavePlayerPref()
     {
-        PlayerPrefs.SetFloat(BGM_TAG, bgmValue);
-        PlayerPrefs.SetFloat(SOUND_TAG, soundValue);
-        PlayerPrefs.SetString(RESOLUTION_TAG, currentResolution);
-        PlayerPrefs.SetString(DISPLAY_MODE_TAG, currentDisplayMode);
+        PlayerPrefs.SetFloat(DataStore.PREF_BGM_TAG, bgmValue);
+        PlayerPrefs.SetFloat(DataStore.PREF_SOUND_TAG, soundValue);
+        PlayerPrefs.SetString(DataStore.PREF_RESOLUTION_TAG, currentResolution);
+        PlayerPrefs.SetString(DataStore.PREF_DISPLAY_MODE_TAG, currentDisplayMode);
         PlayerPrefs.Save();
     }
 

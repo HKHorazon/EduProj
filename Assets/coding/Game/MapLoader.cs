@@ -25,7 +25,7 @@ public class MapLoader : MonoBehaviour
         yield return new WaitForSeconds(0.1f);
         yield return null;
 
-        GameObject gameItem = Resources.Load<GameObject>("Stages/"+mapFileName);
+        GameObject gameItem = Resources.Load<GameObject>(mapFileName);
 
 
         yield return new WaitForSeconds(0.1f);

@@ -61,7 +61,7 @@ public class InGameMenu_Dialog : DialogBase
                 if (isTrue)
                 {
                     SelfHide(true);
-                    GameManager.Instance.GoBackMenu();
+                    DataStore.Instance.LoadMenuSceneFromPlay();
                 }
                 else
                 {

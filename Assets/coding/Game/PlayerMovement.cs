@@ -79,7 +79,7 @@ public class PlayerMovement : MovingObject
             {
                 ControlEnable = false;
                 yield return new WaitForSeconds(0.5f);
-                GameManager.Instance.ShowVictoryDialog();
+                GameManager.Instance.VictoryFunctions();
             }
         }
     }

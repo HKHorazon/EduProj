@@ -62,15 +62,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\coding\Game\MovingObject.cs" />
+    <Compile Include="Assets\coding\Dialog\Victory_Dialog_OneAnswer.cs" />
     <Compile Include="Assets\coding\UI\ButtonScript.cs" />
     <Compile Include="Assets\coding\Dialog\InGameMenu_Dialog.cs" />
     <Compile Include="Assets\coding\Dialog\NewGame_Dialog.cs" />
+    <Compile Include="Assets\coding\General\EDirection.cs" />
     <Compile Include="Assets\coding\Game\GameManager.cs" />
     <Compile Include="Assets\coding\UI\PanelManager.cs" />
     <Compile Include="Assets\coding\General\DontDestroyScript.cs" />
     <Compile Include="Assets\coding\System\DataStore.cs" />
     <Compile Include="Assets\coding\System\AudioManager.cs" />
-    <Compile Include="Assets\coding\Data\NewScriptableObjectScript.cs" />
     <Compile Include="Assets\coding\UI\DialogManager.cs" />
     <Compile Include="Assets\coding\General\MenuScene_Init.cs" />
     <Compile Include="Assets\coding\Dialog\Victory_Dialog.cs" />

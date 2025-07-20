@@ -63,7 +63,7 @@ public class DialogManager : MonoBehaviour
         return (T)finalScript;
     }
 
-    public T Show<T>() where T : DialogBase
+    public T Show<T>(bool immediatly = false) where T : DialogBase
     {
         T finalScript = Get<T>();
 

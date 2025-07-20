@@ -15,13 +15,13 @@ public class NewGame_Dialog : DialogBase
 
     private Action<int> gameStartAction = null;
 
-    public void Init(Action<int> gameStartAction)
+    public void Init(int prevStage, Action<int> gameStartAction)
     {
         this.gameStartAction = gameStartAction;
         
         InitItems();
 
-        FillItemStatus();
+        FillItemStatus(prevStage);
     }
 
     private void InitItems()
@@ -48,9 +48,8 @@ public class NewGame_Dialog : DialogBase
         }
     }
 
-    private void FillItemStatus()
+    private void FillItemStatus(int currentId)
     {
-        int currentId = 2;
         foreach(var item in itemList)
         {
             if(item.id == currentId)

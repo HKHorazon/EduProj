@@ -3,6 +3,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Tilemaps;
@@ -59,10 +61,10 @@ public class GameManager : MonoBehaviour
 
     private void StartNewGame()
     {
-        string mapName = DataStore.Instance.CurrentMapName;
+        string mapName =  DataStore.Instance.GetMapName();
         if (mapName == null || mapName == "")
         {
-            mapName = DataStore.FIRST_GAME_LEVEL;
+            mapName = DataStore.FIRST_GAME_LEVEL_NAME;
         }
         Debug.Log($"Start MapName = {mapName}");
 
@@ -72,10 +74,10 @@ public class GameManager : MonoBehaviour
 
     public void RestartGame()
     {
-        string mapName = DataStore.Instance.CurrentMapName;
+        string mapName = DataStore.Instance.GetMapName();
         if (mapName == null || mapName == "")
         {
-            mapName = DataStore.FIRST_GAME_LEVEL;
+            mapName = DataStore.FIRST_GAME_LEVEL_NAME;
         }
 
         StartCoroutine(RestartGameCoroutine());
@@ -86,10 +88,10 @@ public class GameManager : MonoBehaviour
 
     private IEnumerator RestartGameCoroutine()
     {
-        string mapName = DataStore.Instance.CurrentMapName;
+        string mapName = DataStore.Instance.GetMapName();
         if (mapName == null || mapName == "")
         {
-            mapName = DataStore.FIRST_GAME_LEVEL;
+            mapName = DataStore.FIRST_GAME_LEVEL_NAME;
         }
 
         DialogManager.Instance.Show<Loading_Dialog>();
@@ -117,11 +119,6 @@ public class GameManager : MonoBehaviour
         });
     }
 
-    public void GoBackMenu()
-    {
-        DialogManager.Instance.Show<Loading_Dialog>();
-        SceneManager.LoadScene(DataStore.MAIN_SCENE);
-    }
 
     #region Map Init
     IEnumerator Initalize(string mapFileName)
@@ -175,6 +172,7 @@ public class GameManager : MonoBehaviour
 
         yield return null;
 
+        gameMap.Init();
 
 
         yield return new WaitForSeconds(1f);
@@ -234,6 +232,7 @@ public class GameManager : MonoBehaviour
             //Version 2: Load Name
             string[] strs = tuple.Item1.name.Split("_");
 
+            push.sequenceID = count;
             push.ID = 0;
             int tempID = 0;
             if (strs.Length == 2 && int.TryParse(strs[1], out tempID)) 
@@ -241,9 +240,9 @@ public class GameManager : MonoBehaviour
                 push.ID = tempID;
             }
             push.SetText(' ');
-            if (gameMap.basicWordTable.ContainsKey(push.ID))
+            if (gameMap.characterTable.ContainsKey(push.ID))
             {
-                push.SetText(gameMap.basicWordTable[push.ID]);
+                push.SetText(gameMap.characterTable[push.ID]);
             }
             
         }
@@ -329,13 +328,155 @@ public class GameManager : MonoBehaviour
 
     public bool CheckVictory()
     {
-        return isVictory;
+        bool DebugON = true;
+
+        if(this.gameMap.answerList.Count == 0) { return false; }
+
+        StringBuilder sb = new StringBuilder();
+        int victoryCount = 0;
+
+        foreach (var answer in this.gameMap.answerList)
+        {
+            List<int> idList = this.gameMap.getIDFromOneAnswer(answer);
+            List<List<Push>> allCombination = CollectAllCombination(idList);
+
+            foreach (var combination in allCombination)
+            {
+                if (AreConsecutive(combination))
+                {
+                    victoryCount++;
+                    break;
+                }
+                if(DebugON) sb.AppendLine(combination.Aggregate("", (current, push) => current + push.sequenceID + ", "));
+            }
+        }
+
+        if (DebugON)
+        {
+            sb.AppendLine($"VICTORY : {this.gameMap.answerList.Count} == {victoryCount}");
+            Debug.LogError($"{sb.ToString()}");
+        }
+        return this.gameMap.answerList.Count == victoryCount;
     }
 
-    internal void ShowVictoryDialog()
+    private List<List<Push>> CollectAllCombination(List<int> idList)
     {
+        List<List<Push>> list = new List<List<Push>>();
+        if(idList == null || idList.Count == 0) { return list; }
+
+        List<List<Push>> tempList = new List<List<Push>>();
+        foreach (int id in idList)
+        {
+            if (this.gameMap.boxTableByCharacters.ContainsKey(id))
+            {
+                List<Push> pushes = this.gameMap.boxTableByCharacters[id];
+                tempList.Add(pushes);
+            }
+        }
+
+        int totalCount = 1;
+        foreach (List<Push> pushes in tempList)
+        {
+            totalCount *= pushes.Count;
+        }
+
+        for (int i = 0; i < totalCount; i++)
+        {
+            List<Push> combination = new List<Push>();
+            int temp = i;
+            for (int j = 0; j < tempList.Count; j++)
+            {
+                List<Push> pushes = tempList[j];
+                int index = temp % pushes.Count;
+                combination.Add(pushes[index]);
+                temp /= pushes.Count;
+            }
+            if (combination.Count > 0)
+            {
+                list.Add(combination);
+            }
+        }
+
+        return list;
+    }
+
+    private bool AreConsecutive(List<Push> pushes)
+    {
+        bool DebugON = true;
+
+        if(pushes.Count == 0) return false;
+        if(pushes.Count == 1) return false;
+
+
+        EDirection storeDirection = EDirection.NotNeghibor;
+
+        StringBuilder sb = new StringBuilder();
+
+        for (int i=0;i<pushes.Count-1; i++)
+        {
+            if (DebugON) { sb.Append($"[{pushes[i].sequenceID}{pushes[i].text.text}]"); }
+
+            EDirection newDir = this.gameMap.GetDirection(pushes[i], pushes[i+1]);
+            if (newDir == EDirection.NotNeghibor)
+            {
+                if (DebugON)
+                {
+                    sb.Append("-FIRST");
+                    Debug.Log(sb.ToString());
+                }
+                return false;
+            }
+            else if (storeDirection == EDirection.NotNeghibor && newDir != EDirection.NotNeghibor) //first time
+            {
+                storeDirection = newDir;
+            }
+            else if(storeDirection != EDirection.NotNeghibor && newDir == storeDirection)
+            {
+                storeDirection = newDir;
+            }
+            else 
+            {
+                if (DebugON)
+                {
+                    sb.Append($"-BREAK newDir={newDir}, store={storeDirection}");
+                    Debug.Log(sb.ToString());
+                }
+                return false;
+            }
+        }
+
+        if (DebugON)
+        {
+            sb.Append("-SUCCESS");
+            Debug.Log(sb.ToString());
+        }
+        return true;
+    }
+
+
+    internal void VictoryFunctions()
+    {
+        int curStage = DataStore.Instance.CurrentStageId;
+        bool isLastStage = curStage >= DataStore.MAX_STAGE_COUNT;
+        int storeStage = PlayerPrefs.GetInt(DataStore.PREF_SAVED_LEVEL, 1);
+
+        AudioManager.Instance.PlaySFX("Sound/Victory");
+
+        curStage++;
+        DataStore.Instance.CurrentStageId = curStage;
+        if (curStage > storeStage)
+        {
+            PlayerPrefs.SetInt(DataStore.PREF_SAVED_LEVEL, curStage);
+            PlayerPrefs.Save();
+        }
+
         Victory_Dialog dialog = DialogManager.Instance.Show<Victory_Dialog>();
-        dialog.Init(delegate () { });
+        dialog.Init(
+            isLastStage,
+            delegate () {
+
+                DataStore.Instance.LoadGamePlayScene(curStage);
+        });
     }
 
     #endregion
