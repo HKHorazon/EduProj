@@ -4,18 +4,18 @@ using UnityEngine.SceneManagement;
 public class DataStore : MonoBehaviour
 {
     public static DataStore mInstance = null;
-    public static DataStore Instance    
+    public static DataStore Instance
     {
-        get 
+        get
         {
-            if(mInstance == null)
+            if (mInstance == null)
             {
                 GameObject obj = new GameObject("DataStore");
                 DontDestroyOnLoad(obj);
                 mInstance = obj.AddComponent<DataStore>();
             }
             return mInstance;
-        } 
+        }
     }
 
 
@@ -31,7 +31,7 @@ public class DataStore : MonoBehaviour
 
     public const string MAIN_SCENE = "MainMenu";
     public const string BATTLE_SCENE = "BattleScene";
-   
+
 
 
     public const string SFX_BUTTON_CLICK = "Sound/UI_Click";
@@ -68,7 +68,7 @@ public class DataStore : MonoBehaviour
         DataStore.Instance.CurrentStageId = stageID;
         SceneManager.LoadScene(DataStore.BATTLE_SCENE);
     }
-    
+
     public void LoadMenuSceneFromPlay()
     {
         PanelManager.Instance.HideAllPanels();
@@ -76,5 +76,22 @@ public class DataStore : MonoBehaviour
         SceneManager.LoadScene(DataStore.MAIN_SCENE);
     }
 
+    #endregion
+
+
+    #region Chinese Numbers
+
+    const string ToChinese = "零一二三四五六七八九十";
+
+    public string GetChineseText(int index)
+    {
+        if (index < 0 || index >= ToChinese.Length)
+        {
+            return string.Empty; // Return empty string for out of range
+        }
+        return ToChinese[index].ToString();
+
+
+    }
     #endregion
 }

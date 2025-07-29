@@ -21,6 +21,7 @@ public class GameMap : SerializedMonoBehaviour
 
     public Grid grid;
     public Tilemap tilemap;
+    public Tilemap tilemap_BoxAndPlayer;
     public Vector3 Wposition = new Vector3(0, 0, 0);
 
     //AnswerText And Descriptions

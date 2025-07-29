@@ -13,6 +13,7 @@ using UnityEngine.UIElements;
 
 public class GameManager : MonoBehaviour
 {
+    public bool DebugON = false;
 
     string MAP_PATH_BASIC = "GameMap";
 
@@ -29,7 +30,7 @@ public class GameManager : MonoBehaviour
     //[field: SerializeField] public GameObject blackLoadingScene { get; private set; }
 
     [SerializeField, ReadOnly] private MapLoader mapLoader = null;
-    [SerializeField, ReadOnly] private PlayerMovement player = null;
+    [SerializeField, ReadOnly] public PlayerMovement player = null;
 
     private static GameManager mInstance = null;
     public static GameManager Instance
@@ -282,12 +283,12 @@ public class GameManager : MonoBehaviour
 
         Dictionary<string, int> temp = new Dictionary<string, int>();
 
-        BoundsInt bounds = gameMap.tilemap.cellBounds;
+        BoundsInt bounds = gameMap.tilemap_BoxAndPlayer.cellBounds;
 
         List<Tuple<Tile, Vector3>> list = new List<Tuple<Tile, Vector3>>();
         foreach (var position in bounds.allPositionsWithin)
         {          
-            Tile tile = gameMap.tilemap.GetTile<Tile>(position);
+            Tile tile = gameMap.tilemap_BoxAndPlayer.GetTile<Tile>(position);
 
             if (tile != null)
             {
@@ -300,7 +301,7 @@ public class GameManager : MonoBehaviour
                     // Debug.Log(tile.name);
                     Tuple<Tile, Vector3> tuple = new Tuple<Tile, Vector3>(tile, gameMap.tilemap.CellToWorld(position));
                   
-                    gameMap.tilemap.SetTile(position, null);
+                    gameMap.tilemap_BoxAndPlayer.SetTile(position, null);
 
                     list.Add(tuple);
                 }
@@ -328,8 +329,6 @@ public class GameManager : MonoBehaviour
 
     public bool CheckVictory()
     {
-        bool DebugON = true;
-
         if(this.gameMap.answerList.Count == 0) { return false; }
 
         StringBuilder sb = new StringBuilder();
@@ -402,8 +401,6 @@ public class GameManager : MonoBehaviour
 
     private bool AreConsecutive(List<Push> pushes)
     {
-        bool DebugON = true;
-
         if(pushes.Count == 0) return false;
         if(pushes.Count == 1) return false;
 

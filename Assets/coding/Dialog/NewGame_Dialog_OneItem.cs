@@ -11,19 +11,23 @@ public class NewGame_Dialog_OneItem : MonoBehaviour
     [SerializeField] private TMP_Text displayText;
     [SerializeField] private Image imageBG;
     [SerializeField] private GameObject objNewStage;
+    [SerializeField] private GameObject objIsFinish;
     private Action<NewGame_Dialog_OneItem> callback;
 
     public void SetData(int id, string str, Action<NewGame_Dialog_OneItem> callback)
     {
         this.id = id;
-        this.displayText.text = str;
+        this.displayText.text = DataStore.Instance.GetChineseText(this.id);
         this.callback = callback;
     }
 
-    public void SetStatus(bool isLock, bool isNew)
+    public void SetStatus(bool isLock, bool isNew, bool isFinish)
     {
+        this.GetComponent<CanvasGroup>().alpha = isLock ? 0.5f : 1f;
         this.GetComponent<Button>().interactable = !isLock;
-        this.objNewStage.SetActive(isNew);
+
+        if (this.objNewStage != null) { this.objNewStage.SetActive(isNew); }
+        if (this.objIsFinish != null) { this.objIsFinish?.SetActive(isFinish); }
     }
 
     public void OnClick()

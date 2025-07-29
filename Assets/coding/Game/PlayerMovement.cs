@@ -11,12 +11,15 @@ public class PlayerMovement : MovingObject
     int step;
     public bool ControlEnable { get; set; } = false;
 
+    private Animator animator = null;
+
 
     // Start is called before the first frame update
     void Start()
     {
-      
-       
+        animator = this.GetComponent<Animator>();
+
+
     }
 
     // Update is called once per frame
@@ -25,7 +28,7 @@ public class PlayerMovement : MovingObject
         if (!ControlEnable) { return; }
 
         Vector2 moveinput = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
-        
+
         moveinput.Normalize();
 
         if (moveinput.sqrMagnitude > 0.5)
@@ -34,7 +37,9 @@ public class PlayerMovement : MovingObject
             {
                 Move(moveinput);
             }
+
         }
+
     }
 
     protected override void PlayMoveSFX()
@@ -63,6 +68,8 @@ public class PlayerMovement : MovingObject
 
         direction.Normalize();
 
+        PlayAnimation(direction);
+
         if (Blocked(transform.position, direction, false))
         {
             yield break;
@@ -84,4 +91,31 @@ public class PlayerMovement : MovingObject
         }
     }
 
+    private void PlayAnimation(Vector2 direction)
+    {
+        Debug.Log($"direction = {direction}");
+
+        if(Mathf.Abs(direction.x) > Mathf.Abs(direction.y))
+        {
+            if (direction.x > 0.1)
+            {
+                animator.SetTrigger("Right");
+            }
+            else if(direction.x < -0.1)
+            {
+                animator.SetTrigger("Left");
+            }
+        }
+        else
+        {
+            if (direction.y > 0)
+            {
+                animator.SetTrigger("Up");
+            }
+            else if (direction.y < -0.1)
+            {
+                animator.SetTrigger("Down");
+            }
+        }
+    }
 }

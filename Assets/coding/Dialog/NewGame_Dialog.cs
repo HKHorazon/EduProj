@@ -54,15 +54,15 @@ public class NewGame_Dialog : DialogBase
         {
             if(item.id == currentId)
             {
-                item.SetStatus(false, true);
+                item.SetStatus(false, true, false);
             }
             else if(item.id < currentId)
             {
-                item.SetStatus(false, false);
+                item.SetStatus(false, false, true);
             }
             else
             {
-                item.SetStatus(true, false);
+                item.SetStatus(true, false, false);
             }
         }
     }

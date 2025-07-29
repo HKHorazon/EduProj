@@ -8,8 +8,12 @@ public class InGameMenu_Dialog : DialogBase
 
     Action onDialogClose = null;
 
+    public TextMeshProUGUI stageText;
+
     public void SetData(Action onDialogClose)
     {
+        string stageID = DataStore.Instance.GetChineseText(DataStore.Instance.CurrentStageId);
+        this.stageText.SetText($"當前關卡：第 {stageID} 關");
         this.onDialogClose = onDialogClose;
     }
 
