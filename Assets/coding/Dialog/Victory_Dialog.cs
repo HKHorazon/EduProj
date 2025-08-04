@@ -46,6 +46,11 @@ public class Victory_Dialog : DialogBase
         victoryText.SetText(text);
     }
 
+    public override void Show(bool immediatly = false)
+    {
+        base.Show(true);
+    }
+
     public void OnClick_Next()
     {
         SelfHide(true);

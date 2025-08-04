@@ -81,10 +81,13 @@
     <Compile Include="Assets\coding\Dialog\NewGame_Dialog_OneItem.cs" />
     <Compile Include="Assets\coding\ABANDON\MenuController.cs" />
     <Compile Include="Assets\coding\Game\Push.cs" />
+    <Compile Include="Assets\coding\UI\RandomUIAnimation.cs" />
     <Compile Include="Assets\coding\Dialog\ConfirmOnly_Dialog.cs" />
     <Compile Include="Assets\coding\Panel\BattleUI_Panel.cs" />
     <Compile Include="Assets\TutorialInfo\Scripts\Readme.cs" />
     <Compile Include="Assets\coding\Game\Create.cs" />
+    <Compile Include="Assets\coding\ABANDON\RandomImageColor.cs" />
+    <Compile Include="Assets\coding\System\ConstString.cs" />
     <Compile Include="Assets\coding\Dialog\Loading_Dialog.cs" />
     <Compile Include="Assets\coding\Game\GridPosition.cs" />
     <Compile Include="Assets\coding\Game\PlayerMovement.cs" />

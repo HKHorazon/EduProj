@@ -45,7 +45,7 @@ public class MainUI_Panel : PanelBase
         YesNo_Dialog ynDialog = DialogManager.Instance.Show<YesNo_Dialog>();
         ynDialog.SetData(
             "",
-            "Are you sure you want to reset all stages?",
+            ConstString.RESET_ALL_PROGRESS_PROMT,
             delegate (bool isTrue)
             {
                 if (isTrue)
@@ -107,7 +107,7 @@ public class MainUI_Panel : PanelBase
         YesNo_Dialog dialog = DialogManager.Instance.Show<YesNo_Dialog>();
         dialog.SetData(
             "",
-            "Are you sure you want to leave?",
+            ConstString.LEAVE_GAME_PROMT,
             delegate (bool isTrue)
             {
                 if (isTrue)

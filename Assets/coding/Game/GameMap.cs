@@ -19,6 +19,7 @@ public class GameMap : SerializedMonoBehaviour
 
     [SerializeField, ReadOnly] public List<Push> AllBoxes { get; private set; }
 
+    public Camera cameraRef;
     public Grid grid;
     public Tilemap tilemap;
     public Tilemap tilemap_BoxAndPlayer;

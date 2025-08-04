@@ -93,6 +93,11 @@ public class DialogManager : MonoBehaviour
     {
         Hide(typeof(T), immediatly);
     }
+    
+    public DialogBase GetCurrent()
+    {
+        return currentDialog;
+    }
 
     public void HideCurrent(bool immediatly=false)
     {

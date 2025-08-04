@@ -104,6 +104,7 @@ public class GameManager : MonoBehaviour
         yield return Initalize(mapName);
         yield return new WaitForSeconds(0.3f);
 
+
         DialogManager.Instance.Hide<Loading_Dialog>();
         this.player.ControlEnable = true;
     }
@@ -174,6 +175,16 @@ public class GameManager : MonoBehaviour
         yield return null;
 
         gameMap.Init();
+
+        Camera.main.transform.position = new Vector3(
+            gameMap.cameraRef.transform.position.x,
+            gameMap.cameraRef.transform.position.y,
+            -10
+        );
+        Camera.main.orthographicSize = gameMap.cameraRef.orthographicSize;
+
+        BattleUI_Panel battleUI = PanelManager.Instance.Get<BattleUI_Panel>();
+        battleUI.SetWordCount(this.gameMap.answerList.Count);
 
 
         yield return new WaitForSeconds(1f);

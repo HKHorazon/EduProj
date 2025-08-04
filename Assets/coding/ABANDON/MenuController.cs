@@ -127,7 +127,7 @@ public class MenuController : MonoBehaviour
         YesNo_Dialog dialog = DialogManager.Instance.Show<YesNo_Dialog>();
         dialog.SetData(
             "",
-            "Are you sure you want to leave?",
+            ConstString.LEAVE_GAME_PROMT,
             delegate (bool isTrue)
             {
                 if (isTrue)

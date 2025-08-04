@@ -27,7 +27,9 @@ public class InGameMenu_Dialog : DialogBase
     public void OnClick_RestartGame()
     {
         YesNo_Dialog yesNo = DialogManager.Instance.Show<YesNo_Dialog>();
-        yesNo.SetData("", "Are you sure you want to restart the game?",
+        yesNo.SetData(
+            "", 
+            ConstString.LEAVE_GAME_PROMT,
             delegate (bool isTrue)
             {
                 if (isTrue)
@@ -59,7 +61,7 @@ public class InGameMenu_Dialog : DialogBase
 
         dialog.SetData(
             "",
-            "Are you sure you want to go back MENU?",
+            ConstString.RETURN_MENU_PROMT,
             delegate (bool isTrue)
             {
                 if (isTrue)
