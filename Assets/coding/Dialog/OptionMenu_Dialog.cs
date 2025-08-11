@@ -2,7 +2,6 @@ using Sirenix.OdinInspector;
 using System;
 using System.Collections.Generic;
 using TMPro;
-using UnityEditor.Search;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -14,19 +13,20 @@ public class OptionMenu_Dialog : DialogBase
     [SerializeField] private TMP_Dropdown displayModeDropDown;
     [SerializeField] private Slider BGMSlider;
     [SerializeField] private Slider SoundSlider;
+    [SerializeField] private CanvasGroup areaResetProgress;
 
     private Dictionary<string, Resolution> allowResolution = new Dictionary<string, Resolution>()
     {
         {"2560 X 1440", new Resolution(){width = 2560, height = 1440} },
-        {"1920 X 1080", new Resolution(){width = 2560, height = 1440} },
+        {"1920 X 1080", new Resolution(){width = 1920, height = 1080} },
         {"1280 X 720", new Resolution(){width = 1280, height = 720} },
     };
 
     private Dictionary<string, FullScreenMode> allowDisplayMode = new Dictionary<string, FullScreenMode>()
     {
-        { "Fullscreen", FullScreenMode.ExclusiveFullScreen },
-        { "Windowed", FullScreenMode.Windowed },
-        { "Fullscreen Window", FullScreenMode.FullScreenWindow }
+        { "全螢幕", FullScreenMode.ExclusiveFullScreen },
+        { "視窗", FullScreenMode.Windowed },
+        { "全螢幕視窗", FullScreenMode.FullScreenWindow }
     };
 
     [SerializeField, ReadOnly] private bool hasLoadedFromPlayerPref = false;
@@ -40,22 +40,29 @@ public class OptionMenu_Dialog : DialogBase
 
     #region Init And Functions
 
-    public void InitData(Action OnClose)
+    public void StartGameLoading()
     {
-        this.OnClose = OnClose;
         if (hasLoadedFromPlayerPref)
         {
             return;
         }
-
-        CollectOptions();
-
         SetDataToDefault();
         LoadPlayerPrefOrDefault();
 
+        hasLoadedFromPlayerPref = true;
+    }
+
+    public void InitData(bool showReset, Action OnClose)
+    {
+        this.OnClose = OnClose;
+
+        StartGameLoading();
+
+        areaResetProgress.alpha = showReset ? 1 : 0;
+        CollectOptions();
+
         FillDataToUI();
 
-        hasLoadedFromPlayerPref = true;
     }
 
     private void CollectOptions()
@@ -88,7 +95,7 @@ public class OptionMenu_Dialog : DialogBase
 
     private void SetDataToDefault()
     {
-        currentDisplayMode =  "Windowed";
+        currentDisplayMode = "視窗";
         currentResolution ="1920 x 1080";
         bgmValue = 0.8f;
         soundValue = 0.8f;
@@ -98,7 +105,7 @@ public class OptionMenu_Dialog : DialogBase
         bgmValue = PlayerPrefs.GetFloat(DataStore.PREF_BGM_TAG, 0.8f);
         soundValue = PlayerPrefs.GetFloat(DataStore.PREF_SOUND_TAG, 0.8f);
         currentResolution = PlayerPrefs.GetString(DataStore.PREF_RESOLUTION_TAG, "1920 x 1080");
-        currentDisplayMode = PlayerPrefs.GetString(DataStore.PREF_DISPLAY_MODE_TAG, "Windowed");
+        currentDisplayMode = PlayerPrefs.GetString(DataStore.PREF_DISPLAY_MODE_TAG, "視窗");
     }
 
     private void SavePlayerPref()
@@ -116,7 +123,15 @@ public class OptionMenu_Dialog : DialogBase
 
     public void OnChange_DisplayMode()
     {
-        Debug.LogError($"OnChange_DisplayMode => {this.displayModeDropDown.value}");
+        string displayText = this.displayModeDropDown.options[this.displayModeDropDown.value].text;
+
+        Debug.LogError($"OnChange_Resolution => {displayText}");
+
+        if (allowDisplayMode.ContainsKey(displayText))
+        {
+            currentDisplayMode = displayText;
+        }
+
         if (allowResolution.ContainsKey(currentResolution)
             && allowDisplayMode.ContainsKey(currentDisplayMode))
         {
@@ -125,12 +140,21 @@ public class OptionMenu_Dialog : DialogBase
                 allowResolution[currentResolution].height,
                 allowDisplayMode[currentDisplayMode]
             );
+            Debug.LogError($"Screen {allowDisplayMode[currentDisplayMode]} :　{allowResolution[currentResolution].width}x{allowResolution[currentResolution].height}");
         }
         if(hasLoadedFromPlayerPref) AudioManager.Instance.PlaySFX(DataStore.SFX_BUTTON_CLICK);
     }
     public void OnChange_Resolution()
     {
-        Debug.LogError($"OnChange_DisplayMode => {this.resolutionDropDown.value}");
+        string displayText = this.resolutionDropDown.options[this.resolutionDropDown.value].text;
+
+        Debug.LogError($"OnChange_Resolution => {displayText}");
+
+        if (allowResolution.ContainsKey(displayText))
+        {
+            currentResolution = displayText;
+        }
+
         if (allowResolution.ContainsKey(currentResolution)
             && allowDisplayMode.ContainsKey(currentDisplayMode)) {
             Screen.SetResolution(
@@ -138,6 +162,7 @@ public class OptionMenu_Dialog : DialogBase
                 allowResolution[currentResolution].height,
                 allowDisplayMode[currentDisplayMode]
             );
+            Debug.LogError($"Screen {allowDisplayMode[currentDisplayMode]} :　{allowResolution[currentResolution].width}x{allowResolution[currentResolution].height}");
         }
         if (hasLoadedFromPlayerPref) AudioManager.Instance.PlaySFX(DataStore.SFX_BUTTON_CLICK);
     }
@@ -160,6 +185,34 @@ public class OptionMenu_Dialog : DialogBase
 
     #region Buttons
 
+    public void OnClick_ResetGameProgress()
+    {
+        this.SelfHide(true);
+        YesNo_Dialog ynDialog = DialogManager.Instance.Show<YesNo_Dialog>();
+        ynDialog.SetData(
+            "",
+            ConstString.RESET_ALL_PROGRESS_PROMT,
+            delegate (bool isTrue)
+            {
+                if (isTrue)
+                {
+                    PlayerPrefs.DeleteKey(DataStore.PREF_SAVED_LEVEL);
+                    PlayerPrefs.Save();
+                    ConfirmOnly_Dialog cDialog = DialogManager.Instance.Show<ConfirmOnly_Dialog>();
+                    cDialog.SetData(
+                        "",
+                        "All stages have been reset.",
+                        null
+                    );
+                    DialogManager.Instance.Show<OptionMenu_Dialog>();
+                }
+                else
+                {
+                    DialogManager.Instance.Show<OptionMenu_Dialog>();
+                }
+            }
+        );
+    }
     public void OnClick_Apply()
     {
         SavePlayerPref();

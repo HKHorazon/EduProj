@@ -29,7 +29,7 @@ public class InGameMenu_Dialog : DialogBase
         YesNo_Dialog yesNo = DialogManager.Instance.Show<YesNo_Dialog>();
         yesNo.SetData(
             "", 
-            ConstString.LEAVE_GAME_PROMT,
+            ConstString.RESTART_BATTLE_PROMT,
             delegate (bool isTrue)
             {
                 if (isTrue)
@@ -48,7 +48,7 @@ public class InGameMenu_Dialog : DialogBase
     public void OnClick_Options()
     {
         OptionMenu_Dialog menu = DialogManager.Instance.Show<OptionMenu_Dialog>();
-        menu.InitData(delegate ()
+        menu.InitData(false, delegate ()
         {
             DialogManager.Instance.Show<InGameMenu_Dialog>();
         });

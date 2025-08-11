@@ -50,14 +50,33 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKey(KeyCode.B))
+        if (Input.GetKey(KeyCode.Escape))
         {
             ShowInGameDialog();
         }
-        if (Input.GetKeyDown(KeyCode.V))
+        else if (Input.GetKey(KeyCode.R))
         {
-            isVictory = true;
+            YesNo_Dialog yesNo = DialogManager.Instance.Show<YesNo_Dialog>();
+            yesNo.SetData(
+                "",
+                ConstString.RESTART_BATTLE_PROMT,
+                delegate (bool isTrue)
+                {
+                    if (isTrue)
+                    {
+                        GameManager.Instance.RestartGame();
+                    }
+                    else
+                    {
+                        
+                    }
+                }
+            );
         }
+        //if (Input.GetKeyDown(KeyCode.V))
+        //{
+        //    isVictory = true;
+        //}
     }
 
     private void StartNewGame()

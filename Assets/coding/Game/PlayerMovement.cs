@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,16 +9,16 @@ public class PlayerMovement : MovingObject
  
     private Vector2 [] movementSave;
     private bool ReadyToMove;
+    [SerializeField] private GameObject objImage = null;
     int step;
     public bool ControlEnable { get; set; } = false;
 
-    private Animator animator = null;
-
+    [SerializeField]  private Animator mainAnimator = null;
+    [SerializeField] private Animator innerAnimator = null;
 
     // Start is called before the first frame update
     void Start()
     {
-        animator = this.GetComponent<Animator>();
 
 
     }
@@ -50,6 +51,7 @@ public class PlayerMovement : MovingObject
     public void Move(Vector2 direction)
     {
         StartCoroutine(MoveInner(direction));
+        //StartCoroutine(MoveTweenAnimation());
     }
 
 
@@ -76,12 +78,14 @@ public class PlayerMovement : MovingObject
         }
         else
         {
+            InnerAnimation(true);
             MovementAnimation(direction);
             while (isMoving)
             {
                 yield return null;
             }
 
+            InnerAnimation(false);
             if (GameManager.Instance.CheckVictory())
             {
                 ControlEnable = false;
@@ -89,6 +93,13 @@ public class PlayerMovement : MovingObject
                 GameManager.Instance.VictoryFunctions();
             }
         }
+    }
+
+
+
+    private void InnerAnimation(bool isMove)
+    {
+        innerAnimator.SetBool("Move", isMove);
     }
 
     private void PlayAnimation(Vector2 direction)
@@ -99,22 +110,22 @@ public class PlayerMovement : MovingObject
         {
             if (direction.x > 0.1)
             {
-                animator.SetTrigger("Right");
+                mainAnimator.SetTrigger("Right");
             }
             else if(direction.x < -0.1)
             {
-                animator.SetTrigger("Left");
+                mainAnimator.SetTrigger("Left");
             }
         }
         else
         {
             if (direction.y > 0)
             {
-                animator.SetTrigger("Up");
+                mainAnimator.SetTrigger("Up");
             }
             else if (direction.y < -0.1)
             {
-                animator.SetTrigger("Down");
+                mainAnimator.SetTrigger("Down");
             }
         }
     }

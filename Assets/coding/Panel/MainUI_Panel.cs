@@ -7,6 +7,13 @@ public class MainUI_Panel : PanelBase
 {
     private string levelToLoad;
 
+
+    private void Start()
+    {
+        OptionMenu_Dialog option = DialogManager.Instance.Get<OptionMenu_Dialog>();
+        option.StartGameLoading();
+    }
+
     private void Update()
     {
         if(Input.GetKeyDown(KeyCode.W))
@@ -99,7 +106,7 @@ public class MainUI_Panel : PanelBase
 
         //TODO
         OptionMenu_Dialog menu = DialogManager.Instance.Show<OptionMenu_Dialog>();
-        menu.InitData(null); 
+        menu.InitData(true, null); 
     }
 
     public void OnClick_Exit()
